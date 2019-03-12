@@ -9,6 +9,7 @@ public class Ladder {
     private String endWord;
     private HashMap<String, MapNode> M;
     private LadderQueue Q;
+    private Generator G;
     private String currentWord;
     private ArrayList<MapNode> path;
 
@@ -59,7 +60,7 @@ public class Ladder {
         }
 
         private boolean isEmpty() {
-            if (head != null) {
+            if (head == null) {
                 return true;
             } else {
                 return false;
@@ -105,8 +106,9 @@ public class Ladder {
         endWord = null;
         M = new HashMap<>();
         Q = new LadderQueue();
+        G = new Generator();
         currentWord = null;
-        path = null;
+        path = new ArrayList<>();
     }
 
     public void loadDictionary(String fileName) {
@@ -124,8 +126,8 @@ public class Ladder {
     }
 
     public void climb(String start, String end) {
-        startWord = start;
-        endWord = end;
+        startWord = start.toUpperCase();
+        endWord = end.toUpperCase();
         currentWord = null;
         Q.clear();
         path.clear();
@@ -135,7 +137,7 @@ public class Ladder {
         currentWord = startWord;
         while (!Q.isEmpty() && currentWord.compareTo(endWord) != 0) {
             currentWord = Q.dequeue();
-            ArrayList<String> neighbors = Generator.neighbors(currentWord);
+            ArrayList<String> neighbors = G.neighbors(currentWord);
             for (String w : neighbors) {
                 if (M.containsKey(w) && !M.get(w).isVisited()) {
                     visit(w);
@@ -156,8 +158,12 @@ public class Ladder {
     public void printPath() {
         System.out.format("Start Word: %s\n", startWord);
         System.out.format("End word: %s\n\n", endWord);
-        for (MapNode N : path) {
-            System.out.println(N.getWord());
+        if (path.size() != 0) {
+            for (MapNode N : path) {
+                System.out.println(N.getWord());
+            }
+        } else {
+            System.out.format("No path between %s and %s", startWord, endWord);
         }
         System.out.println();
     }

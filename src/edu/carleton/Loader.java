@@ -9,8 +9,8 @@ public class Loader {
     public Loader() {
     }
 
-    ArrayList<String> load(String fileName) {
-        ArrayList<String> realWords = null;
+    public ArrayList<String> load(String fileName) {
+        ArrayList<String> realWords = new ArrayList<>();
         File wordsFile = new File(fileName);
         Scanner scanner = null;
         try {

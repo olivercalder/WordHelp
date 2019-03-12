@@ -4,11 +4,11 @@
 
 #### _By: Oliver Calder_
 
-### Ladder
+## Ladder
 
 Builds builds the shortest ladder between two words by changing one letter at a time.
 
-##### Usage:
+#### Usage:
 
 `java Ladder startWord endWord [--dictFile=fileName]`
 

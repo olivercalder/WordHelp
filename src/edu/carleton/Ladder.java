@@ -169,9 +169,25 @@ public class Ladder {
     }
 
     public static void main(String[] args) {
-        if (args.length != 2) {
-            System.out.println("Usage: java Ladder startWord endWord");
+        if (args.length < 2 || args.length > 3) {
+            System.out.println("Usage: java Ladder startWord endWord [--dictFile=fileName]");
             System.exit(1);
+        }
+        String dictFile = null;
+        if (args.length == 3) {
+            dictFile = null;
+            for (String arg : args) {
+                if (arg.length() > 11 && arg.substring(0, 11).equals("--dictFile=")) {
+                    dictFile = arg.substring(11);
+                }
+            }
+            if (dictFile == null) {
+                System.out.println("Arguments not recognized");
+                System.out.println("Usage: java Ladder startWord endWord [--dictFile=fileName]");
+                System.exit(1);
+            }
+        } else {
+            dictFile = "sowpods.txt";
         }
         String start = args[0];
         String end = args[1];
@@ -180,7 +196,7 @@ public class Ladder {
             System.exit(1);
         }
         Ladder L = new Ladder();
-        L.loadDictionary("sowpods.txt");
+        L.loadDictionary(dictFile);
         L.climb(start, end);
         L.printPath();
     }

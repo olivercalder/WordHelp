@@ -1,16 +1,16 @@
 package edu.carleton;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.HashMap;
 
 public class Loader {
 
-    public Loader(String n) {
+    public Loader() {
     }
 
-    public HashMap load(String fileName) {
-        HashMap<String, String> M = new HashMap<>();
+    ArrayList<String> load(String fileName) {
+        ArrayList<String> realWords = null;
         File wordsFile = new File(fileName);
         Scanner scanner = null;
         try {
@@ -22,8 +22,8 @@ public class Loader {
         }
         while (scanner.hasNextLine()) {
             String word = scanner.nextLine();
-            M.put(word, word);
+            realWords.add(word);
         }
-        return M;
+        return realWords;
     }
 }

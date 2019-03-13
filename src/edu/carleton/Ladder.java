@@ -7,6 +7,7 @@ public class Ladder {
 
     private String startWord;
     private String endWord;
+    private ArrayList<String> ignoredWords;
     private HashMap<String, MapNode> M;
     private LadderQueue Q;
     private Generator G;
@@ -104,6 +105,7 @@ public class Ladder {
     public Ladder() {
         startWord = null;
         endWord = null;
+        ignoredWords = new ArrayList<>();
         M = new HashMap<>();
         Q = new LadderQueue();
         G = new Generator();
@@ -125,6 +127,26 @@ public class Ladder {
         M.get(word).visit(parent);
     }
 
+    public void ignore(ArrayList<String> ignored) {
+        for (String wordChunk : ignored) {
+            String w = wordChunk.toUpperCase();
+            String[] words = w.split(",");
+            for (String word : words) {
+                ignoredWords.add(word);
+            }
+        }
+    }
+
+    public boolean ignores(String word) {
+        boolean isIgnored = false;
+        for (String w : ignoredWords) {
+            if (word.equals(w)) {
+                isIgnored = true;
+            }
+        }
+        return isIgnored;
+    }
+
     public void climb(String start, String end) {
         startWord = start.toUpperCase();
         endWord = end.toUpperCase();
@@ -135,11 +157,11 @@ public class Ladder {
         visit(startWord);
         Q.enqueue(startWord);
         currentWord = startWord;
-        while (!Q.isEmpty() && currentWord.compareTo(endWord) != 0) {
+        while (!Q.isEmpty() && !currentWord.equals(endWord)) {
             currentWord = Q.dequeue();
             ArrayList<String> neighbors = G.neighbors(currentWord);
             for (String w : neighbors) {
-                if (M.containsKey(w) && !M.get(w).isVisited()) {
+                if (M.containsKey(w) && !this.ignores(w) && !M.get(w).isVisited()) {
                     visit(w);
                     Q.enqueue(w);
                 }
@@ -156,8 +178,17 @@ public class Ladder {
     }
 
     public void printPath() {
-        System.out.format("Start Word: %s\n", startWord);
-        System.out.format("End word: %s\n\n", endWord);
+        System.out.format("Start word: %s\n", startWord);
+        System.out.format("End word: %s\n", endWord);
+
+        if (!ignoredWords.isEmpty()) {
+            System.out.print("Ignored words:");
+            for (String word : ignoredWords) {
+                System.out.format(" %s", word);
+            }
+            System.out.print("\n\n");
+        }
+
         if (path.size() != 0) {
             for (MapNode N : path) {
                 System.out.println(N.getWord());
@@ -169,24 +200,28 @@ public class Ladder {
     }
 
     public static void main(String[] args) {
-        if (args.length < 2 || args.length > 3) {
-            System.out.println("Usage: java Ladder startWord endWord [--dictFile=fileName]");
+        if (args.length < 2) {
+            System.out.println("Usage: java Ladder startWord endWord [--dictFile=fileName] [--ignore=word");
             System.exit(1);
         }
         String dictFile = null;
-        if (args.length == 3) {
+        ArrayList<String> ignored = new ArrayList<>();
+        if (args.length >= 3) {
             dictFile = null;
+            int count = 0;
             for (String arg : args) {
                 if (arg.length() > 11 && arg.substring(0, 11).equals("--dictFile=")) {
                     dictFile = arg.substring(11);
+                } else if (arg.length() > 9 && arg.substring(0, 9).equals("--ignore=")) {
+                    ignored.add(arg.substring(9));
+                } else if (count >= 2) {
+                    System.out.format("Argument %s not recognized\n", arg);
+                    System.exit(1);
                 }
+                count++;
             }
-            if (dictFile == null) {
-                System.out.println("Arguments not recognized");
-                System.out.println("Usage: java Ladder startWord endWord [--dictFile=fileName]");
-                System.exit(1);
-            }
-        } else {
+        }
+        if (dictFile == null) {
             dictFile = "sowpods.txt";
         }
         String start = args[0];
@@ -197,6 +232,7 @@ public class Ladder {
         }
         Ladder L = new Ladder();
         L.loadDictionary(dictFile);
+        L.ignore(ignored);
         L.climb(start, end);
         L.printPath();
     }

@@ -15,18 +15,18 @@ Builds builds the shortest ladder between two words by changing one letter at a 
 ___Example:___
 
 ```
-$ java Ladder Brain Heart --ignore=deaws,brast
+$ java Ladder Brain Heart --dictFile=sowpods.txt --ignore=deaws,bruit --ignore=braws
 
 Start word: BRAIN
 End word: HEART
-Ignored words: DEAWS BRAST
+Ignored words: DEAWS BRUIT BRAWS
 
 BRAIN
-BRAWN
-BRAWS
-BRADS
-BEADS
-HEADS
+BRAID
+BRAND
+BRANS
+BEANS
+BEARS
 HEARS
 HEART
 ```

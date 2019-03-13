@@ -147,6 +147,10 @@ public class Ladder {
         return isIgnored;
     }
 
+    public void clearIgnored() {
+        ignoredWords.clear();
+    }
+
     public void climb(String start, String end) {
         startWord = start.toUpperCase();
         endWord = end.toUpperCase();

@@ -5,12 +5,12 @@
 #### _By: Oliver Calder_
 
 ### Tools:
-- Ladder
-> A word ladder between two words
-- Anagram
-> An anagram generator
-- Wildcard
-> A wildcard filler
+- __Ladder__
+  - _A word ladder between two words_
+- __Anagram__
+  - _An anagram generator_
+- __Wildcard__
+  - _A wildcard filler_
 
 ## Ladder
 

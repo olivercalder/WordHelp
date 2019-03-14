@@ -9,6 +9,7 @@ public class Ladder {
     private HashMap<String, MapNode> M;
     private LadderQueue Q;
     private Generator G;
+    private Loader loader;
     private String currentWord;
     private ArrayList<MapNode> path;
 
@@ -77,12 +78,13 @@ public class Ladder {
         M = new HashMap<>();
         Q = new LadderQueue();
         G = new Generator();
+        loader = new Loader();
         currentWord = null;
         path = new ArrayList<>();
     }
 
     public void loadDictionary(String fileName) {
-        Loader loader = new Loader();
+        loader = new Loader();
         M = loader.loadHashMap(fileName);
     }
 
@@ -123,12 +125,12 @@ public class Ladder {
         path.clear();
 
         if (!M.containsKey(startWord)) {
-            System.out.format("%s is not a word\n\n", startWord);
+            System.out.format("\n%s is not a word\n", startWord);
             MapNode newStartNode = new MapNode(startWord);
             M.put(startWord, newStartNode);
         }
         if (!M.containsKey((endWord))) {
-            System.out.format("%s is not a word\n\n", endWord);
+            System.out.format("\n%s is not a word\n", endWord);
             MapNode newEndNode = new MapNode(endWord);
             M.put(endWord, newEndNode);
         }
@@ -157,7 +159,7 @@ public class Ladder {
     }
 
     public void printPath() {
-        System.out.format("Start word: %s\n", startWord);
+        System.out.format("\nStart word: %s\n", startWord);
         System.out.format("End word: %s\n", endWord);
 
         if (!ignoredWords.isEmpty()) {
@@ -175,9 +177,8 @@ public class Ladder {
             }
             System.out.println();
         } else {
-            System.out.format("No path between %s and %s", startWord, endWord);
+            System.out.format("No path between %s and %s\n", startWord, endWord);
         }
-        System.out.println();
     }
 
     public static void main(String[] args) {

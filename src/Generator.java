@@ -8,7 +8,7 @@ public class Generator {
         alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
     }
 
-    private ArrayList<String> cycleSlotInWord(int i, String word) {
+    public ArrayList<String> cycleSlotInWord(int i, String word) {
         ArrayList<String> words = new ArrayList<>();
         for (char L : alphabet) {
             String newWord = "";

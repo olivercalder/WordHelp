@@ -29,7 +29,7 @@ public class Wildcard {
         char[] origChars = wildWord.toCharArray();
         indices = new ArrayList<>();
         for (Integer i = 0; i < origChars.length; i++) {
-            if (origChars[i] == ('#') || origChars[i] == ('%')) {
+            if (origChars[i] == '#' || origChars[i] == '%' || origChars[i] == '*') {
                 indices.add(i);
             }
         }

@@ -37,7 +37,6 @@ BEANS
 BEARS
 HEARS
 HEART
-
 ```
 
 ## Anagram
@@ -61,7 +60,6 @@ BASER
 BRAES
 SABER
 SABRE
-
 ```
 
 ## Wildcard
@@ -84,5 +82,4 @@ SPRAT
 SPRIT
 STRUT
 SURAT
-
 ```

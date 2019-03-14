@@ -22,13 +22,17 @@ public class Generator {
         return words;
     }
 
-    public ArrayList<String> neighbors(String word) {
+    public ArrayList<String> genNeighbors(String word) {
         ArrayList<String> nearWords = new ArrayList<>();
         for (int i = 0; i < word.length(); i++) {
             ArrayList<String> words = cycleSlotInWord(i, word);
             nearWords.addAll(words);
         }
         return nearWords;
+    }
+
+    public void setAlphabet(String a) {
+        alphabet = a.toCharArray();
     }
 
 }

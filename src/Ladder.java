@@ -83,6 +83,10 @@ public class Ladder {
         path = new ArrayList<>();
     }
 
+    public void setAlphabet(String a) {
+        G.setAlphabet(a);
+    }
+
     public void loadDictionary(String fileName) {
         loader = new Loader();
         M = loader.loadHashMap(fileName);
@@ -140,7 +144,7 @@ public class Ladder {
         currentWord = startWord;
         while (!Q.isEmpty() && !currentWord.equals(endWord)) {
             currentWord = Q.dequeue();
-            ArrayList<String> neighbors = G.neighbors(currentWord);
+            ArrayList<String> neighbors = G.genNeighbors(currentWord);
             for (String w : neighbors) {
                 if (M.containsKey(w) && !this.ignores(w) && !M.get(w).isVisited()) {
                     visit(w);
@@ -187,24 +191,21 @@ public class Ladder {
             System.exit(1);
         }
         String dictFile = null;
+        String alphabet = null;
         ArrayList<String> ignored = new ArrayList<>();
-        if (args.length >= 3) {
-            dictFile = null;
-            int count = 0;
-            for (String arg : args) {
-                if (arg.length() > 11 && arg.substring(0, 11).equals("--dictFile=")) {
-                    dictFile = arg.substring(11);
-                } else if (arg.length() > 9 && arg.substring(0, 9).equals("--ignore=")) {
-                    ignored.add(arg.substring(9));
-                } else if (count >= 2) {
-                    System.out.format("Argument %s not recognized\n", arg);
+        if (args.length > 2) {
+            for (int i = 0; i < args.length; i++) {
+                if (args[i].length() > 11 && args[i].substring(0, 11).equals("--dictFile=")) {
+                    dictFile = args[i].substring(11);
+                } else if (args[i].length() > 9 && args[i].substring(0, 9).equals("--ignore=")) {
+                    ignored.add(args[i].substring(9));
+                } else if (args[i].length() > 11 && args[i].substring(0, 11).equals("--alphabet=")){
+                    alphabet = args[i].substring(11);
+                } else if (i >= 2) {
+                    System.out.format("Argument %s not recognized\n", args[i]);
                     System.exit(1);
                 }
-                count++;
             }
-        }
-        if (dictFile == null) {
-            dictFile = "sowpods.txt";
         }
         String start = args[0];
         String end = args[1];
@@ -213,6 +214,12 @@ public class Ladder {
             System.exit(1);
         }
         Ladder L = new Ladder();
+        if (alphabet != null) {
+            L.setAlphabet(alphabet.toUpperCase());
+        }
+        if (dictFile == null) {
+            dictFile = "sowpods.txt";
+        }
         L.loadDictionary(dictFile);
         L.ignore(ignored);
         L.climb(start, end);

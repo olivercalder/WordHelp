@@ -18,6 +18,10 @@ public class Wildcard {
         G = new Generator();
     }
 
+    public void setAlphabet(String a) {
+        G.setAlphabet(a);
+    }
+
     public void loadDictionary(String fileName) {
         loader = new Loader();
         D = loader.loadDictionary(fileName);
@@ -60,23 +64,31 @@ public class Wildcard {
 
     public static void main(String[] args) {
         String dictFile = null;
+        String alphabet = null;
         if (args.length < 1) {
-            System.out.println("Usage: java Wildcard word [--dictFile=fileName]");
+            System.out.println("Usage: java Wildcard word [--dictFile=fileName] [--alphabet=ABCDEFGHIJKLMNOPQRSTUVWXYZ]");
             System.exit(1);
-        } else if (args.length == 2) {
+        } else if (args.length > 1) {
             dictFile = null;
-            if (args[1].length() > 11 && args[1].substring(0, 11).equals("--dictFile=")) {
-                dictFile = args[1].substring(11);
-            } else {
-                System.out.format("Argument %s not recognized\n", args[1]);
-                System.exit(1);
+            for (int i = 1; i < args.length; i++) {
+                if (args[i].length() > 11 && args[i].substring(0, 11).equals("--dictFile=")) {
+                    dictFile = args[i].substring(11);
+                } else if (args[i].length() > 11 && args[i].substring(0, 11).equals("--alphabet=")) {
+                    alphabet = args[i].substring(11);
+                } else {
+                    System.out.format("Argument %s not recognized\n", args[1]);
+                    System.exit(1);
+                }
             }
+        }
+        String w = args[0];
+        Wildcard W = new Wildcard();
+        if (alphabet != null) {
+            W.setAlphabet(alphabet.toUpperCase());
         }
         if (dictFile == null) {
             dictFile = "sowpods.txt";
         }
-        String w = args[0];
-        Wildcard W = new Wildcard();
         W.loadDictionary(dictFile);
         W.genWords(w);
         W.printWords();

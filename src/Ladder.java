@@ -187,7 +187,7 @@ public class Ladder {
 
     public static void main(String[] args) {
         if (args.length < 2) {
-            System.out.println("Usage: java Ladder startWord endWord [--dictFile=fileName] [--ignore=word]");
+            System.out.println("Usage: java Ladder startWord endWord [--ignore=word] [--dictFile=fileName] [--alphabet=ABCDEFGHIJKLMNOPQRSTUVWXYZ]");
             System.exit(1);
         }
         String dictFile = null;

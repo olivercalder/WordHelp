@@ -134,15 +134,14 @@ the shell does not interpret it as a command line wildcard
 #### _Example:_
 
 ```
-$ java Wildcard S#r#t
+$ java Wildcard 'ап*****' --dictFile=word_rus.txt --alphabet=АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ
 
-Possible words which fulfill wildcards of S#R#T:
+Possible words which fulfill wildcards of АП*****:
 
-SCRAT
-SPRAT
-SPRIT
-STRUT
-SURAT
+АПОКРИФ
+АПОЛЛОН
+АПОФЕОЗ
+АППЕТИТ
 ```
 
 ### Implementation:

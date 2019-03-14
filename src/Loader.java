@@ -28,7 +28,7 @@ public class Loader {
         }
         while (scanner.hasNextLine()) {
             String word = scanner.nextLine();
-            realWords.add(word);
+            realWords.add(word.toUpperCase());
         }
     }
 

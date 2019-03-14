@@ -52,7 +52,7 @@ MapNode parent
 ```
 Each possible neighbor word is checked against a `HashMap` of `MapNode`s built
 by `Loader` from a text file containing a list of 'valid' words.
-- _A sample list can be downloaded [here](https://cs.carleton.edu/faculty/jondich/documents/sowpods.txt) by those affiliated with Carleton College_
+- _A list of English words can be downloaded [here](https://cs.carleton.edu/faculty/jondich/documents/sowpods.txt) by those affiliated with Carleton College_
 
 The `startWord` is added to a custom `LadderQueue` class based on a linked list.
 
@@ -114,7 +114,7 @@ word.
 
 Finally, each possible anagram is checked against a `HashSet` built
 by `Loader` from a text file containing a list of 'valid' words.
-- _A sample list can be downloaded [here](https://cs.carleton.edu/faculty/jondich/documents/sowpods.txt) by those affiliated with Carleton College_
+- _A list of English words can be downloaded [here](https://cs.carleton.edu/faculty/jondich/documents/sowpods.txt) by those affiliated with Carleton College_
 
 If a word is valid, it is added to a list of valid anagrams, which is then
 printed.
@@ -159,6 +159,6 @@ and wildcards found in the original word.
 
 Finally, each possible word is checked against a `HashSet` built
 by `Loader` from a text file containing a list of 'valid' words.
-- _A sample list can be downloaded [here](https://cs.carleton.edu/faculty/jondich/documents/sowpods.txt) by those affiliated with Carleton College_
+- _A list of English words can be downloaded [here](https://cs.carleton.edu/faculty/jondich/documents/sowpods.txt) by those affiliated with Carleton College_
 
 If a word is valid, it is added to a list of valid words, which is then printed.

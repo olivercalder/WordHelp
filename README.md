@@ -128,7 +128,7 @@ Generates words which fulfill the wildcards of a given word.
 `$ java Wildcard word [--dictFile=fileName] [--alphabet=ABCDEFGHIJKLMNOPQRSTUVWXYZ]`
 
 Wildcard characters include `#`, `%`, and `*`
-- If * is used, word must be surrounded by single quotes (ie. 'word') such that
+- If `*` is used, word must be surrounded by single quotes (ie. 'word') such that
 the shell does not interpret it as a command line wildcard
 
 #### _Example:_

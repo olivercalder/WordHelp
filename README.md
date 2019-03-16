@@ -5,12 +5,18 @@
 #### _By: Oliver Calder_
 
 ### Tools:
-- __Ladder__
-  - _A word ladder between two words_
-- __Anagram__
-  - _An anagram generator_
-- __Wildcard__
-  - _A wildcard filler_
+- __Ladder:__ A word ladder between two words
+  - [Description](http://github.com/olivercalder/WordHelp#Ladder)
+  - [Usage](https://github.com/olivercalder/WordHelp#Usage)
+  - [Implementation](https://github.com/olivercalder/WordHelp#Implementation)
+- __Anagram:__ An anagram generator
+  - [Description](https://github.com/olivercalder/WordHelp#Anagram)
+  - [Usage](https://github.com/olivercalder/WordHelp#Usage-1)
+  - [Implementation](https://github.com/olivercalder/WordHelp#Implementation-1)
+- __Wildcard:__ A wildcard filler
+  - [Description](https://github.com/olivercalder/WordHelp$#Wildcard)
+  - [Usage](https://github.com/olivercalder/WordHelp#Usage-2)
+  - [Implementation](https://github.com/olivercalder/WordHelp#Implementation-2)
 
 ## Ladder
 

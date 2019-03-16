@@ -23,7 +23,7 @@ Builds the shortest ladder between two words by changing one letter at a time.
 #### _Example:_
 
 ```
-$ java Ladder Brain Heart --dictFile=sowpods.txt --ignore=deaws,bruit --ignore=braws
+$ java Ladder Brain Heart --dictFile=Dictionaries/english_words.txt --ignore=deaws,bruit --ignore=braws
 
 Start word: BRAIN
 End word: HEART
@@ -52,7 +52,7 @@ MapNode parent
 ```
 Each possible neighbor word is checked against a `HashMap` of `MapNode`s built
 by `Loader` from a text file containing a list of 'valid' words.
-- _A list of English words can be downloaded [here](https://cs.carleton.edu/faculty/jondich/documents/sowpods.txt) by those affiliated with Carleton College_
+- _Sample dictionaries can be found in the Dictionaries folder_
 
 The `startWord` is added to a custom `LadderQueue` class based on a linked list.
 
@@ -83,16 +83,14 @@ Generates anagrams for a given word.
 #### _Example:_
 
 ```
-$ java Anagram Bears
+$ java Anagram faire --dictFile=Dictionaries/mots_francais.txt
 
-Anagrams for BEARS:
+Anagrams for FAIRE:
 
-BEARS
-BARES
-BASER
-BRAES
-SABER
-SABRE
+FERAI
+FRAIE
+FAIRE
+FIERA
 ```
 
 ### Implementation:
@@ -114,7 +112,7 @@ word.
 
 Finally, each possible anagram is checked against a `HashSet` built
 by `Loader` from a text file containing a list of 'valid' words.
-- _A list of English words can be downloaded [here](https://cs.carleton.edu/faculty/jondich/documents/sowpods.txt) by those affiliated with Carleton College_
+- _Sample dictionaries can be found int the Dictionaries folder_
 
 If a word is valid, it is added to a list of valid anagrams, which is then
 printed.
@@ -134,7 +132,7 @@ the shell does not interpret it as a command line wildcard
 #### _Example:_
 
 ```
-$ java Wildcard 'ап*****' --dictFile=word_rus.txt --alphabet=АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ
+$ java Wildcard 'ап*****' --dictFile=Dictionaries/russian_words.txt --alphabet=АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ
 
 Possible words which fulfill wildcards of АП*****:
 
@@ -159,6 +157,6 @@ and wildcards found in the original word.
 
 Finally, each possible word is checked against a `HashSet` built
 by `Loader` from a text file containing a list of 'valid' words.
-- _A list of English words can be downloaded [here](https://cs.carleton.edu/faculty/jondich/documents/sowpods.txt) by those affiliated with Carleton College_
+- _Sample dictionaries can be found in the Dictionaries folder_
 
 If a word is valid, it is added to a list of valid words, which is then printed.

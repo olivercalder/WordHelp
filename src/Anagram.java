@@ -4,29 +4,44 @@ import java.util.HashSet;
 public class Anagram {
 
     private String word;
-    private ArrayList<String> anagrams;
+    private HashSet<String> anagrams;
     private Loader loader;
     private HashSet<String> D;
 
+    /**
+     * Constructor for the Anagram class.
+     * Initializes empty values for all instance variables.
+     */
     public Anagram() {
         word = null;
-        anagrams = new ArrayList<>();
+        anagrams = new HashSet<>();
         loader = new Loader();
         D = new HashSet<>();
     }
 
+    /**
+     * Loads words from a file, then creates a HashSet containing a String object for each word
+     * @param fileName the name of the file from which the words are read
+     */
     public void loadDictionary(String fileName) {
         loader = new Loader();
-        D = loader.loadDictionary(fileName);
+        D = loader.loadHashSet(fileName);
     }
 
+    /**
+     * Generates anagrams for the given word.
+     * Calls the subAnagram() method, which recursively chooses each letter of the original word
+     * and generates all the possible anagrams of the remaining letters, then concatenating those
+     * possibilities to the initially chosen letter.
+     * @param w the word from which the anagrams will be generated
+     */
     public void genAnagrams(String w) {
-        anagrams = new ArrayList<>();
+        anagrams = new HashSet<>();
         word = w.toUpperCase();
         char[] chars = word.toCharArray();
         ArrayList<String> possibilities = subAnagram(chars);
         for (String p : possibilities) {
-            if (D.contains(p)) {
+            if (D.contains(p) && !anagrams.contains(p)) {
                 anagrams.add(p);
             }
         }
@@ -57,6 +72,9 @@ public class Anagram {
         return ans;
     }
 
+    /**
+     * Prints the anagrams generated from the last call of the genAnagrams() method.
+     */
     public void printAnagrams() {
         System.out.format("\nAnagrams for %s:\n\n", word);
         for (String a : anagrams) {
@@ -65,7 +83,14 @@ public class Anagram {
         System.out.println();
     }
 
-    public static void main(String args[]) {
+    /**
+     * Main method for the Anagram class. Generates anagrams of a given word.
+     * Draws dictionary of valid words from file specified with --dictFile=fileName
+     * @param args the arguments used to generate anagrams:
+     *             args[0] = word;
+     *             Optional: args[1] = --dictFile=fileName;
+     */
+    public static void main(String[] args) {
         String dictFile = null;
         if (args.length < 1) {
             System.out.println("Usage: java Anagram word [--dictFile=fileName]");
@@ -80,7 +105,7 @@ public class Anagram {
             }
         }
         if (dictFile == null) {
-            dictFile = "sowpods.txt";
+            dictFile = "Dictionaries/english_words.txt";
         }
         String w = args[0];
         Anagram A = new Anagram();

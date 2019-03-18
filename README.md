@@ -120,8 +120,10 @@ Finally, each possible anagram is checked against a `HashSet` built
 by `Loader` from a text file containing a list of 'valid' words.
 - _Sample dictionaries can be found int the Dictionaries folder_
 
-If a word is valid, it is added to a list of valid anagrams, which is then
+If a word is valid, it is added to a new `HashSet` of valid anagrams, which is then
 printed.
+- A `HashSet` is used, rather than an `ArrayList`, so as to avoid duplicates
+created by words in which one or more letters occur multiple times.
 
 ## Wildcard
 

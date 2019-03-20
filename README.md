@@ -40,8 +40,10 @@ CONCATENATE is a valid word in the dictionary.
 
 ### Implementation:
 
-`Check` builds a `HashSet` of words from a given dictionary file, and then checks
-whether the given word appears in that `HashSet`.
+`Check` builds a `HashSet` of words from a given dictionary file using `Loader`.
+- _Sample dictionaries can be found in the Dictionaries folder_
+
+Then, the program checks whether the given word appears in that `HashSet`.
 
 ## Ladder
 
@@ -151,7 +153,7 @@ word.
 
 Finally, each possible anagram is checked against a `HashSet` built
 by `Loader` from a text file containing a list of 'valid' words.
-- _Sample dictionaries can be found int the Dictionaries folder_
+- _Sample dictionaries can be found in the Dictionaries folder_
 
 If a word is valid, it is added to a new `HashSet` of valid anagrams, which is then
 printed.
@@ -162,9 +164,15 @@ created by words in which one or more letters occur multiple times.
 
 The program first splits the word into its individual characters and then sorts them,
 thus generating an alphabetized list of characters. Any word which undergoes the same
-sorting process will have an identical list of characters. Thus, the program goes
-through every word in the dictionary, sorts its characters, and, if it matches the
-given word, adds it (as it originally was) to the `HashSet` of valid anagrams.
+sorting process will have an identical list of characters.
+
+The program then loads a dictionary HashSet built by Loader from a text file containing 
+a list of 'valid' words.
+- _Sample dictionaries can be found in the Dictionaries folder_
+
+Each of these words is then split into characters by the same
+process as the input word, its characters are sorted, and, if it matches the characters
+of the given word, it is added (as it originally was) to the `HashSet` of valid anagrams.
 
 ## Wildcard
 

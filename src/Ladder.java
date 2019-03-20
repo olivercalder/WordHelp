@@ -6,12 +6,12 @@ public class Ladder {
     private String startWord;
     private String endWord;
     private ArrayList<String> ignoredWords;
-    private HashMap<String, MapNode> M;
-    private LadderQueue Q;
-    private Generator G;
+    private HashMap<String, GraphNode> graph;
+    private LadderQueue queue;
+    private Generator generator;
     private Loader loader;
     private String currentWord;
-    private ArrayList<MapNode> path;
+    private ArrayList<GraphNode> path;
 
     private class LadderQueue {
 
@@ -20,11 +20,11 @@ public class Ladder {
 
         private class Node {
 
-            public MapNode data;
+            public GraphNode data;
             public Node next;
 
-            private Node (MapNode N) {
-                data = N;
+            private Node (GraphNode graphNode) {
+                data = graphNode;
                 next = null;
             }
         }
@@ -38,8 +38,8 @@ public class Ladder {
         }
 
         private void enqueue(String word) {
-            MapNode N = M.get(word);
-            Node newNode = new Node(N);
+            GraphNode graphNode = graph.get(word);
+            Node newNode = new Node(graphNode);
             if (this.isEmpty()) {
                 head = newNode;
                 tail = newNode;
@@ -50,17 +50,17 @@ public class Ladder {
         }
 
         private String dequeue() {
-            MapNode N = dequeueNode();
-            return N.getWord();
+            GraphNode node = dequeueNode();
+            return node.getWord();
         }
 
-        private MapNode dequeueNode() {
+        private GraphNode dequeueNode() {
             if (this.isEmpty()) {
                 return null;
             } else {
-                MapNode N = head.data;
+                GraphNode node = head.data;
                 head = head.next;
-                return N;
+                return node;
             }
         }
 
@@ -79,9 +79,9 @@ public class Ladder {
         startWord = null;
         endWord = null;
         ignoredWords = new ArrayList<>();
-        M = new HashMap<>();
-        Q = new LadderQueue();
-        G = new Generator();
+        graph = new HashMap<>();
+        queue = new LadderQueue();
+        generator = new Generator();
         loader = new Loader();
         currentWord = null;
         path = new ArrayList<>();
@@ -93,25 +93,25 @@ public class Ladder {
      * @param a a String containing every character which will be considered part of the alphabet
      */
     public void setAlphabet(String a) {
-        G.setAlphabet(a);
+        generator.setAlphabet(a);
     }
 
     /**
-     * Loads words from a file, then creates a HashMap containing a MapNode object for each word
+     * Loads words from a file, then creates a HashMap containing a GraphNode object for each word
      * @param fileName the name of the file from which the words are read
      */
     public void loadDictionary(String fileName) {
         loader = new Loader();
-        M = loader.loadHashMap(fileName);
+        graph = loader.loadHashMap(fileName);
     }
 
     /**
-     * Sets the status of a MapNode to visited, and assigns the parent MapNode from which it was visited.
-     * @param word the MapNode which is to be visited
+     * Sets the status of a GraphNode to visited, and assigns the parent GraphNode from which it was visited.
+     * @param word the GraphNode which is to be visited
      */
     public void visit(String word) {
-        MapNode parent = M.get(currentWord);
-        M.get(word).visit(parent);
+        GraphNode parent = graph.get(currentWord);
+        graph.get(word).visit(parent);
     }
 
     /**
@@ -156,9 +156,9 @@ public class Ladder {
      * Builds a word ladder between two words.
      * Starting at String start, the method generates neighboring words which differ
      * from the starting word by one letter, and these generated words are checked
-     * against a list of valid words. If they are valid, their corresponding MapNodes
+     * against a list of valid words. If they are valid, their corresponding GraphNodes
      * are added to the LadderQueue.
-     * Then, the first MapNode is taken from the queue and visited, and the neighbors
+     * Then, the first GraphNode is taken from the queue and visited, and the neighbors
      * of it are generated. This process is repeated until either the end word is reached,
      * or the LadderQueue is empty.
      * @param start the word from which to begin the word ladder
@@ -168,36 +168,36 @@ public class Ladder {
         startWord = start.toUpperCase();
         endWord = end.toUpperCase();
         currentWord = null;
-        Q.clear();
+        queue.clear();
         path.clear();
 
-        if (!M.containsKey(startWord)) {
+        if (!graph.containsKey(startWord)) {
             System.out.format("\n%s is not a word\n", startWord);
-            MapNode newStartNode = new MapNode(startWord);
-            M.put(startWord, newStartNode);
+            GraphNode newStartNode = new GraphNode(startWord);
+            graph.put(startWord, newStartNode);
         }
-        if (!M.containsKey((endWord))) {
+        if (!graph.containsKey((endWord))) {
             System.out.format("\n%s is not a word\n", endWord);
-            MapNode newEndNode = new MapNode(endWord);
-            M.put(endWord, newEndNode);
+            GraphNode newEndNode = new GraphNode(endWord);
+            graph.put(endWord, newEndNode);
         }
 
         visit(startWord);
-        Q.enqueue(startWord);
+        queue.enqueue(startWord);
         currentWord = startWord;
-        while (!Q.isEmpty() && !currentWord.equals(endWord)) {
-            currentWord = Q.dequeue();
-            ArrayList<String> neighbors = G.genNeighbors(currentWord);
+        while (!queue.isEmpty() && !currentWord.equals(endWord)) {
+            currentWord = queue.dequeue();
+            ArrayList<String> neighbors = generator.genNeighbors(currentWord);
             for (String w : neighbors) {
-                if (M.containsKey(w) && !this.ignores(w) && !M.get(w).isVisited()) {
+                if (graph.containsKey(w) && !this.ignores(w) && !graph.get(w).isVisited()) {
                     visit(w);
-                    Q.enqueue(w);
+                    queue.enqueue(w);
                 }
             }
         }
 
-        if (!Q.isEmpty()) {
-            MapNode currentNode = M.get(currentWord);
+        if (!queue.isEmpty()) {
+            GraphNode currentNode = graph.get(currentWord);
             while (currentNode != null) {
                 path.add(0, currentNode);
                 currentNode = currentNode.getParent();
@@ -222,7 +222,7 @@ public class Ladder {
         System.out.println();
 
         if (path.size() != 0) {
-            for (MapNode N : path) {
+            for (GraphNode N : path) {
                 System.out.println(N.getWord());
             }
             System.out.println();
@@ -269,16 +269,16 @@ public class Ladder {
             System.out.println("Error: Words must be of the same length");
             System.exit(1);
         }
-        Ladder L = new Ladder();
+        Ladder ladder = new Ladder();
         if (alphabet != null) {
-            L.setAlphabet(alphabet.toUpperCase());
+            ladder.setAlphabet(alphabet.toUpperCase());
         }
         if (dictFile == null) {
             dictFile = "Dictionaries/english_words.txt";
         }
-        L.loadDictionary(dictFile);
-        L.ignore(ignored);
-        L.climb(start, end);
-        L.printPath();
+        ladder.loadDictionary(dictFile);
+        ladder.ignore(ignored);
+        ladder.climb(start, end);
+        ladder.printPath();
     }
 }

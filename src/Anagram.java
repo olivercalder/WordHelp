@@ -1,12 +1,14 @@
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.lang.Math;
 
 public class Anagram {
 
     private String word;
     private HashSet<String> anagrams;
+    private Boolean recursive;
     private Loader loader;
-    private HashSet<String> D;
+    private HashSet<String> dictionary;
 
     /**
      * Constructor for the Anagram class.
@@ -15,8 +17,9 @@ public class Anagram {
     public Anagram() {
         word = null;
         anagrams = new HashSet<>();
+        recursive = null;
         loader = new Loader();
-        D = new HashSet<>();
+        dictionary = new HashSet<>();
     }
 
     /**
@@ -25,7 +28,44 @@ public class Anagram {
      */
     public void loadDictionary(String fileName) {
         loader = new Loader();
-        D = loader.loadHashSet(fileName);
+        dictionary = loader.loadHashSet(fileName);
+    }
+
+    /**
+     * Generates anagrams for the given word.
+     * Checks the size of the word vs the size of the dictionary to decide whether to use iteration or recursion.
+     * @param w the word from which the anagrams will be generated
+     */
+    public void generateAnagrams(String w) {
+        if (dictionary.size() > Math.pow(w.length(), w.length())) {
+            generateAnagramsRecursive(w);
+        } else {
+            generateAnagramsIterative(w);
+        }
+    }
+
+    /**
+     * Generates anagrams for the given word.
+     * Checks every word in the dictionary to see if it contains the same combination of letters as the given word.
+     * @param w the word from which the anagrams will be generated
+     */
+    public void generateAnagramsIterative(String w) {
+        recursive = false;
+        anagrams = new HashSet<>();
+        word = w.toUpperCase();
+        String letters = sortString(word);
+        for (String realWord : dictionary) {
+            if (sortString(realWord).equals(letters)) {
+                anagrams.add(realWord);
+            }
+        }
+    }
+
+    private String sortString(String word) {
+        char[] charArray = word.toCharArray();
+        Arrays.sort(charArray);
+        String sortedWord = new String(charArray);
+        return sortedWord;
     }
 
     /**
@@ -35,20 +75,21 @@ public class Anagram {
      * possibilities to the initially chosen letter.
      * @param w the word from which the anagrams will be generated
      */
-    public void genAnagrams(String w) {
+    public void generateAnagramsRecursive(String w) {
+        recursive = true;
         anagrams = new HashSet<>();
         word = w.toUpperCase();
         char[] chars = word.toCharArray();
-        ArrayList<String> possibilities = subAnagram(chars);
+        HashSet<String> possibilities = subAnagram(chars);
         for (String p : possibilities) {
-            if (D.contains(p) && !anagrams.contains(p)) {
+            if (dictionary.contains(p) && !anagrams.contains(p)) {
                 anagrams.add(p);
             }
         }
     }
 
-    private ArrayList<String> subAnagram(char[] subChars) {
-        ArrayList<String> ans = new ArrayList<>();
+    private HashSet<String> subAnagram(char[] subChars) {
+        HashSet<String> ans = new HashSet<>();
         if (subChars.length == 1) {
             ans.add(Character.toString(subChars[0]));
         } else {
@@ -62,9 +103,9 @@ public class Anagram {
                         remaining[n-1] = subChars[n];
                     }
                 }
-                ArrayList<String> subAns = subAnagram(remaining);
+                HashSet<String> subAns = subAnagram(remaining);
                 for (String subAn : subAns) {
-                    String a = Character.toString(c) + subAn;
+                    String a = c + subAn;
                     ans.add(a);
                 }
             }
@@ -73,10 +114,16 @@ public class Anagram {
     }
 
     /**
-     * Prints the anagrams generated from the last call of the genAnagrams() method.
+     * Prints the anagrams generated from the last call of the generateAnagrams() method.
      */
     public void printAnagrams() {
-        System.out.format("\nAnagrams for %s:\n\n", word);
+        String type = null;
+        if (recursive) {
+            type = "Recursive";
+        } else {
+            type = "Iterative";
+        }
+        System.out.format("\n%s Anagrams for %s:\n\n", type, word);
         for (String a : anagrams) {
             System.out.println(a);
         }
@@ -92,15 +139,26 @@ public class Anagram {
      */
     public static void main(String[] args) {
         String dictFile = null;
+        Boolean recursive = null;
         if (args.length < 1) {
-            System.out.println("Usage: java Anagram word [--dictFile=fileName]");
+            System.out.println("Usage: java Anagram word [--dictFile=fileName] [--recursive=true/false]");
             System.exit(1);
-        } else if (args.length == 2) {
+        } else if (args.length >= 2) {
             dictFile = null;
-            if (args[1].length() > 11 && args[1].substring(0, 11).equals("--dictFile=")) {
-                dictFile = args[1].substring(11);
+            for (int i = 1; i < args.length; i++)
+            if (args[i].length() > 11 && args[i].substring(0, 11).equals("--dictFile=")) {
+                dictFile = args[i].substring(11);
+            } else if (args[i].length() > 12 && args[i].substring(0, 12).equals("--recursive=")) {
+                if (args[i].substring(12).toLowerCase().equals("true")) {
+                    recursive = true;
+                } else if (args[i].substring(12).toLowerCase().equals("false")) {
+                    recursive = false;
+                } else {
+                    System.out.format("Argument %s not recognized\nValid values: true false", args[i]);
+                    System.exit(1);
+                }
             } else {
-                System.out.format("Argument %s not recognized\n", args[1]);
+                System.out.format("Argument %s not recognized\n", args[i]);
                 System.exit(1);
             }
         }
@@ -108,9 +166,15 @@ public class Anagram {
             dictFile = "Dictionaries/english_words.txt";
         }
         String w = args[0];
-        Anagram A = new Anagram();
-        A.loadDictionary(dictFile);
-        A.genAnagrams(w);
-        A.printAnagrams();
+        Anagram anagram = new Anagram();
+        anagram.loadDictionary(dictFile);
+        if (recursive == null) {
+            anagram.generateAnagrams(w);
+        } else if (recursive) {
+            anagram.generateAnagramsRecursive(w);
+        } else {
+            anagram.generateAnagramsIterative(w);
+        }
+        anagram.printAnagrams();
     }
 }

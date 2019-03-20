@@ -7,8 +7,8 @@ public class Wildcard {
     private ArrayList<Integer> indices;
     private ArrayList<String> words;
     private Loader loader;
-    private HashSet<String> D;
-    private Generator G;
+    private HashSet<String> dictionary;
+    private Generator generator;
 
     /**
      * Constructor for the Wildcard class.
@@ -19,8 +19,8 @@ public class Wildcard {
         indices = new ArrayList<>();
         words = new ArrayList<>();
         loader = new Loader();
-        D = new HashSet<>();
-        G = new Generator();
+        dictionary = new HashSet<>();
+        generator = new Generator();
     }
 
     /**
@@ -29,7 +29,7 @@ public class Wildcard {
      * @param a a String containing every character which will be considered part of the alphabet
      */
     public void setAlphabet(String a) {
-        G.setAlphabet(a);
+        generator.setAlphabet(a);
     }
 
     /**
@@ -38,7 +38,7 @@ public class Wildcard {
      */
     public void loadDictionary(String fileName) {
         loader = new Loader();
-        D = loader.loadHashSet(fileName);
+        dictionary = loader.loadHashSet(fileName);
     }
 
     /**
@@ -69,12 +69,12 @@ public class Wildcard {
         for (Integer index : indices) {
             newWords = new ArrayList<>();
             for (String word : currentWords) {
-                newWords.addAll(G.cycleSlotInWord(index, word));
+                newWords.addAll(generator.cycleSlotInWord(index, word));
             }
             currentWords = newWords;
         }
         for (String possibility : newWords) {
-            if (D.contains(possibility)) {
+            if (dictionary.contains(possibility)) {
                 words.add(possibility);
             }
         }
@@ -119,15 +119,15 @@ public class Wildcard {
             }
         }
         String w = args[0];
-        Wildcard W = new Wildcard();
+        Wildcard wildcard = new Wildcard();
         if (alphabet != null) {
-            W.setAlphabet(alphabet.toUpperCase());
+            wildcard.setAlphabet(alphabet.toUpperCase());
         }
         if (dictFile == null) {
             dictFile = "Dictionaries/english_words.txt";
         }
-        W.loadDictionary(dictFile);
-        W.genWords(w);
-        W.printWords();
+        wildcard.loadDictionary(dictFile);
+        wildcard.genWords(w);
+        wildcard.printWords();
     }
 }

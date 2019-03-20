@@ -21,10 +21,10 @@ public class Generator {
      */
     public ArrayList<String> cycleSlotInWord(int i, String word) {
         ArrayList<String> words = new ArrayList<>();
-        for (char L : alphabet) {
+        for (char letter : alphabet) {
             String newWord = "";
             char[] letters = word.toUpperCase().toCharArray();
-            letters[i] = L;
+            letters[i] = letter;
             for (int k = 0; k < letters.length; k++) {
                 newWord = newWord + Character.toString(letters[k]);
             }
@@ -56,5 +56,4 @@ public class Generator {
     public void setAlphabet(String a) {
         alphabet = a.toCharArray();
     }
-
 }

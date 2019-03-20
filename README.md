@@ -5,18 +5,43 @@
 #### _By: Oliver Calder_
 
 ### Tools:
-- __Ladder:__ A word ladder between two words
-  - [Description](http://github.com/olivercalder/WordHelp#Ladder)
+- __Check:__ Checks whether a word is in the dictionary
+  - [Description](https://github.com/olivercalder/WordHelp#Check)
   - [Usage](https://github.com/olivercalder/WordHelp#Usage)
   - [Implementation](https://github.com/olivercalder/WordHelp#Implementation)
-- __Anagram:__ An anagram generator
-  - [Description](https://github.com/olivercalder/WordHelp#Anagram)
+- __Ladder:__ A word ladder between two words
+  - [Description](https://github.com/olivercalder/WordHelp#Ladder)
   - [Usage](https://github.com/olivercalder/WordHelp#Usage-1)
   - [Implementation](https://github.com/olivercalder/WordHelp#Implementation-1)
-- __Wildcard:__ A wildcard filler
-  - [Description](https://github.com/olivercalder/WordHelp$#Wildcard)
+- __Anagram:__ An anagram generator
+  - [Description](https://github.com/olivercalder/WordHelp#Anagram)
   - [Usage](https://github.com/olivercalder/WordHelp#Usage-2)
   - [Implementation](https://github.com/olivercalder/WordHelp#Implementation-2)
+- __Wildcard:__ A wildcard filler
+  - [Description](https://github.com/olivercalder/WordHelp$#Wildcard)
+  - [Usage](https://github.com/olivercalder/WordHelp#Usage-3)
+  - [Implementation](https://github.com/olivercalder/WordHelp#Implementation-3)
+
+## Check
+
+Checks whether a word is in the dictionary.
+
+### Usage:
+
+`java Check word [--dictFile=fileName]`
+
+#### _Example:_
+
+```
+$ java Check concatenate
+
+CONCATENATE is a valid word in the dictionary.
+```
+
+### Implementation:
+
+`Check` builds a `HashSet` of words from a given dictionary file, and then checks
+whether the given word appears in that `HashSet`.
 
 ## Ladder
 
@@ -50,13 +75,13 @@ HEART
 `Ladder` uses breadth first search to find the shortest path between two words
 by traversing through words which differ by only one letter from the parent word.
 
-`Ladder` uses a custom `MapNode` class which stores the following:
+`Ladder` uses a custom `GraphNode` class which stores the following:
 ```
 String word
 boolean visited
-MapNode parent
+GraphNode parent
 ```
-Each possible neighbor word is checked against a `HashMap` of `MapNode`s built
+Each possible neighbor word is checked against a `HashMap` of `GraphNode`s built
 by `Loader` from a text file containing a list of 'valid' words.
 - _Sample dictionaries can be found in the Dictionaries folder_
 
@@ -68,7 +93,7 @@ and checks its neighbors by doing the following:
 If the neighbor is in the `HashMap`:
 - it is added to the `LadderQueue`
 - its `visited` boolean is set to true
-- its `parent` is set to the `MapNode` of `currentWord`
+- its `parent` is set to the `GraphNode` of `currentWord`
 
 This process is repeated until either:
 1. the `LadderQueue` is empty, or 
@@ -84,14 +109,14 @@ Generates anagrams for a given word.
 
 ### Usage:
 
-`$ java Anagram word [--dictFile=fileName]`
+`java Anagram word [--dictFile=fileName] [--recursive=true/false]`
 
 #### _Example:_
 
 ```
-$ java Anagram faire --dictFile=Dictionaries/mots_francais.txt
+$ java Anagram faire --dictFile=Dictionaries/mots_francais.txt --recursive=false
 
-Anagrams for FAIRE:
+Iterative Anagrams for FAIRE:
 
 FERAI
 FRAIE
@@ -101,7 +126,15 @@ FIERA
 
 ### Implementation:
 
-`Anagram` uses recursion to generate possible anagrams for a given word.
+`Anagram` uses recursion or iteration to generate possible anagrams for a given word.
+
+If the type has not been specified, the program will first decide whether to use
+iteration or recursion by comparing the length of the given word to the size of the
+dictionary. If the size of the dictionary is greater than the length of the word to
+the power of itself (length**length), then the program will use recursion. Otherwise,
+it will use iteration.
+
+#### Recursion method:
 
 The program first splits the word into its individual characters and then
 uses the `subAnagram` method to build possible anagrams with the given letters.
@@ -125,13 +158,21 @@ printed.
 - A `HashSet` is used, rather than an `ArrayList`, so as to avoid duplicates
 created by words in which one or more letters occur multiple times.
 
+#### Iteration method:
+
+The program first splits the word into its individual characters and then sorts them,
+thus generating an alphabetized list of characters. Any word which undergoes the same
+sorting process will have an identical list of characters. Thus, the program goes
+through every word in the dictionary, sorts its characters, and, if it matches the
+given word, adds it (as it originally was) to the `HashSet` of valid anagrams.
+
 ## Wildcard
 
 Generates words which fulfill the wildcards of a given word.
 
 ### Usage:
 
-`$ java Wildcard word [--dictFile=fileName] [--alphabet=ABCDEFGHIJKLMNOPQRSTUVWXYZ]`
+`java Wildcard word [--dictFile=fileName] [--alphabet=ABCDEFGHIJKLMNOPQRSTUVWXYZ]`
 
 Wildcard characters include `#`, `%`, and `*`
 - If `*` is used, word must be surrounded by single quotes (ie. 'word') such that
